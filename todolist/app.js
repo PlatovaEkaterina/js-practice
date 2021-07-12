@@ -1,42 +1,64 @@
-let buttonEnter = document.getElementById('enter');
-let userInput = document.getElementById('userInput');
-let ul = document.querySelector('ul');
-
-function inputLength() {
-    return userInput.value.length > 0;
-}
-
-function createTodo() {
-    let li = document.createElement("li");
-    li.appendChild(document.createTextNode(userInput.value));
-    ul.appendChild(li);
-    userInput.value = '';
-
-
-    li.onclick = function() {
-        li.classList.toggle('done');
-    }
-
-    let deleteButton = document.createElement('button');
-    deleteButton.appendChild(document.createTextNode('X'));
-    li.appendChild(deleteButton);
-    deleteButton.addEventListener('click', deleteTodoItem);
-
-    function deleteTodoItem() {
-        li.classList.add('delete');
-    }
-}
-
-function changeListAfterKeypress(event) {
-    if ( inputLength() && event.which === 13) {
+$(function() {
+    let buttonEnter = $('#enter');
+    buttonEnter.click(function(){
         createTodo();
+    })
+    let userInput = $('#userInput');
+    let ul = $('ul');
+    let localStorage = window.localStorage;
+    let itemMap = [
+        {
+            ind:1,
+            text:'sample'
+        }
+    ]
+    
+    function inputLength(){
+        return !!userInput.val();
     }
-}
-
-buttonEnter.onclick = function(){
-    if (inputLength()) {
-        createTodo();
+    
+    function createTodo(){
+        let li = $("<li>");
+        li.animate(
+            {
+                'margin-right': '50',
+                'margin-left': '50'
+            }, {duration:1000, queue:false}
+        ).fadeIn(750);
+        li.append(document.createTextNode(userInput.val()));
+        ul.append(li);
+        itemMap.push(
+            {
+                ind:itemMap.length+1,
+                text:userInput.val()
+            }
+        )
+        localStorage.setItem('Todo_items', JSON.stringify(itemMap));
+        userInput.val('');
+        li.click(function() {
+            li.toggleClass('done');
+        });
+    
+        let deleteButton = $('<button>');
+        deleteButton.append(document.createTextNode('X'));
+        li.append(deleteButton);
+        deleteButton.click(deleteTododItem);
+    
+        function deleteTododItem(){
+            li.toggleClass('done');
+            li.animate(
+                {
+                    'margin-right': '-=100',
+                    'margin-left': '+=100'
+                }, {duration:1000, queue:false}
+            ).fadeOut(1500);
+        }
+    
+    function changeListAfterKeypress(event) {
+        if (inputLength() && event.which === 13) {
+            createTodo()
+        }
     }
-}
+    
+    userInput.keypress(changeListAfterKeypress);
 
-userInput.addEventListener('keypress', changeListAfterKeypress);
