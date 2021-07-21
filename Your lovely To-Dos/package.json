@@ -1,0 +1,15 @@
+{
+  "name": "yourlovelytodos",
+  "version": "0.0.1",
+  "description": "Web application for creating to-do lists.",
+  "main": "index.js",
+  "scripts": {
+    "sass": "node-sass -w sass/ -o assets/css/ --recursive",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "PlatovER",
+  "license": "NTT",
+  "dependencies": {
+    "node-sass": "^6.0.1"
+  }
+}
